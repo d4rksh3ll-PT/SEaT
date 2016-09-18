@@ -4,6 +4,9 @@ using System.Linq;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.DirectoryServices;
+//using System.Data;
+using System.Reflection;
+
 
 namespace SEaT
 {
@@ -239,17 +242,117 @@ namespace SEaT
             ).ToArray();
         }
 
+        static Boolean IsWritable(string Directory)
+        {
+            try
+            {
+                string path = Directory + "\\" + "TESTING-RW";
+                using (StreamWriter sw = File.CreateText(path))
+                {
+                    sw.WriteLine("TEST");
+                }
+                File.Delete(path);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        //static DataTable SetTable()
+        //{
+        //    DataTable table = new DataTable();
+        //    table.Columns.Add("Computer", typeof(string));
+        //    table.Columns.Add("Directory", typeof(string));
+        //    table.Columns.Add("Status", typeof(string));
+        //    return table;
+        //}
+
+        static string GetVersion()
+        {
+            Assembly CurrentAssembly = Assembly.GetExecutingAssembly();
+            System.Diagnostics.FileVersionInfo fileVersionInfo = System.Diagnostics.FileVersionInfo.GetVersionInfo(CurrentAssembly.Location);
+            return fileVersionInfo.FileVersion;
+        }
+
+        static void GetHeader()
+        {
+            Console.WriteLine("===================================================");
+            Console.WriteLine("SEaT - Share Enumeration and Test ({0})", GetVersion());
+            Console.WriteLine("===================================================");
+            Console.WriteLine("Please send your comments to d4rksh3ll@gmail.com \n");
+        }
+
+        static void EnumComputer(string computerName)
+        {
+            Console.WriteLine(computerName+":");
+            foreach (var shareName in GetAllShares(computerName)) 
+            {
+                string strUNC = @"\\"+computerName+"\\"+shareName;
+                if (IsWritable(strUNC))
+                    Console.WriteLine("\t(OK)["+shareName+"]");
+                EnumDirectories(strUNC,1);
+            }
+        }
+
+        static void EnumDirectories(string directoryPath, int indent)
+        {
+            foreach (var dir in GetSubdirectories(directoryPath)) 
+            {
+                currDepth = 1;
+                try
+                {
+                    if (IsWritable(directoryPath))
+                        Console.WriteLine("\t{0}{1}", new string('\t', indent), "(OK)\t" + dir);
+                    if (currDepth != maxDepth)
+                        EnumDirectories(directoryPath + "\\" + dir, currDepth++);
+                }
+                catch
+                { }
+              //  for (int i = 1; i <= depth; i++ )
+              //  {
+              //      Console.WriteLine("\t\t" + IsWritable(directoryPath) + "\t" + dir);
+              //  }
+            }
+        }
+        
+        //static DataTable resultTable;
+        static int maxDepth = 1;
+        static int currDepth = 0;
+
         static void Main(string[] args)
         {
+            GetHeader();
+            List<string> listNames = new List<string>();
+            Console.WriteLine("Building list...");
             foreach (var computerName in VisibleComputers())
             {
-                Console.WriteLine(computerName);
-                foreach (var shareName in GetAllShares(computerName)) 
+                try
                 {
-                    Console.WriteLine(shareName);
+                    listNames.Add(computerName);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(computerName + ":" + e.Message);
                 }
             }
-
+            if (listNames.Count == 0)
+            {
+                Console.WriteLine("No computers found!!!");
+                Environment.Exit(-1);
+            }
+            //resultTable = SetTable();
+            for (int i = 0; i < listNames.Count; i++)
+            {
+                EnumComputer(listNames[i].ToString());
+               
+            } 
+                //foreach (var shareName in GetAllShares(computerName)) 
+               // {
+              //      Console.WriteLine(shareName);
+              //  }
+            //}
             Console.ReadKey(true);
           
         }
