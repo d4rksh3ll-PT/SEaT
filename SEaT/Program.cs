@@ -4,7 +4,6 @@ using System.Linq;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.DirectoryServices;
-//using System.Data;
 using System.Reflection;
 
 
@@ -260,15 +259,6 @@ namespace SEaT
             }
         }
 
-        //static DataTable SetTable()
-        //{
-        //    DataTable table = new DataTable();
-        //    table.Columns.Add("Computer", typeof(string));
-        //    table.Columns.Add("Directory", typeof(string));
-        //    table.Columns.Add("Status", typeof(string));
-        //    return table;
-        //}
-
         static string GetVersion()
         {
             Assembly CurrentAssembly = Assembly.GetExecutingAssembly();
@@ -284,6 +274,11 @@ namespace SEaT
             Console.WriteLine("Please send your comments to d4rksh3ll@gmail.com \n");
         }
 
+        static void ShowUsage()
+        {
+            
+        }
+
         static void EnumComputer(string computerName)
         {
             Console.WriteLine(computerName+":");
@@ -291,7 +286,7 @@ namespace SEaT
             {
                 string strUNC = @"\\"+computerName+"\\"+shareName;
                 if (IsWritable(strUNC))
-                    Console.WriteLine("\t(OK)["+shareName+"]");
+                    Console.WriteLine("\t(!)["+shareName+"]");
                 EnumDirectories(strUNC,1);
             }
         }
@@ -304,7 +299,7 @@ namespace SEaT
                 try
                 {
                     if (IsWritable(directoryPath))
-                        Console.WriteLine("\t{0}{1}", new string('\t', indent), "(OK)\t" + dir);
+                        Console.WriteLine("\t{0}{1}", new string('\t', indent), "(!)\t" + dir);
                     if (currDepth != maxDepth)
                         EnumDirectories(directoryPath + "\\" + dir, currDepth++);
                 }
@@ -317,44 +312,41 @@ namespace SEaT
             }
         }
         
-        //static DataTable resultTable;
         static int maxDepth = 1;
         static int currDepth = 0;
 
         static void Main(string[] args)
         {
             GetHeader();
+            if (args.Length == 0)
+            {
+                ShowUsage();
+                Environment.Exit(0);
+            }
             List<string> listNames = new List<string>();
             Console.WriteLine("Building list...");
             foreach (var computerName in VisibleComputers())
             {
                 try
                 {
-                    listNames.Add(computerName);
+                    if (args[0].Contains("*") || computerName.Contains(args[0]))
+                        listNames.Add(computerName);
                 }
-                catch (Exception e)
-                {
+               catch (Exception e)
+               {
                     Console.WriteLine(computerName + ":" + e.Message);
-                }
+               }
             }
             if (listNames.Count == 0)
             {
-                Console.WriteLine("No computers found!!!");
+                Console.WriteLine("No computers found!");
                 Environment.Exit(-1);
             }
-            //resultTable = SetTable();
             for (int i = 0; i < listNames.Count; i++)
             {
                 EnumComputer(listNames[i].ToString());
-               
-            } 
-                //foreach (var shareName in GetAllShares(computerName)) 
-               // {
-              //      Console.WriteLine(shareName);
-              //  }
-            //}
-            Console.ReadKey(true);
-          
+
+            }
         }
     }
 }
