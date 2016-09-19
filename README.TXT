@@ -11,5 +11,5 @@ Enumerates all computers and shares even hidden or administrative.
 SEaT.exe serverXYZ
 Enumerates all matching computers with the given string.
 
-SEaT.exe \\\\server\\share[\\folder] [/R]
+SEaT.exe \\server\share[\folder] [/R]
 List and tests the share, can use the /R switch to perform recursive tests.
