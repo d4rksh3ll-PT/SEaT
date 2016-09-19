@@ -1,2 +1,1 @@
-# SEaT
-Share Enumeration and Test
+#SEaT (Share Enumeration and Test)
