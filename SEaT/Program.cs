@@ -268,9 +268,9 @@ namespace SEaT
 
         static void GetHeader()
         {
-            Console.WriteLine("===================================================");
-            Console.WriteLine("SEaT - Share Enumeration and Test ({0})", GetVersion());
-            Console.WriteLine("===================================================");
+            Console.WriteLine("============================================================");
+            Console.WriteLine("SEaT - Share Enumeration and ACL Testing ({0})", GetVersion());
+            Console.WriteLine("============================================================");
             Console.WriteLine("Please send your comments to d4rksh3ll@gmail.com \n");
         }
 

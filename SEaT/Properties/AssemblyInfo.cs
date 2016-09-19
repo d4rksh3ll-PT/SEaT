@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("SEaT")]
-[assembly: AssemblyDescription("Share Enumeration and Test")]
+[assembly: AssemblyDescription("Share Enumeration and ACL Testing")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("d4rksh3ll")]
 [assembly: AssemblyProduct("SEaT")]
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("2016.9.19.1326")]
-[assembly: AssemblyFileVersion("2016.9.19.1326")]
+[assembly: AssemblyVersion("2016.9.19.1342")]
+[assembly: AssemblyFileVersion("2016.9.19.1342")]
