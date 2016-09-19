@@ -286,10 +286,16 @@ namespace SEaT
             Console.WriteLine(computerName+":");
             foreach (var shareName in GetAllShares(computerName)) 
             {
-                string strUNC = @"\\"+computerName+"\\"+shareName;
-                if (IsWritable(strUNC))
-                    Console.WriteLine("\t(!)["+shareName+"]");
-                EnumDirectories(strUNC,1);
+                try
+                {
+                    string strUNC = @"\\" + computerName + "\\" + shareName;
+                    if (IsWritable(strUNC))
+                        Console.WriteLine("\t(!)[" + shareName + "]");
+                    EnumDirectories(strUNC, 1);
+                }
+                catch
+                {
+                }
             }
         }
 
