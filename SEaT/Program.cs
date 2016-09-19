@@ -329,7 +329,7 @@ namespace SEaT
             {
                 try
                 {
-                    if (args[0].Contains("*") || computerName.Contains(args[0]))
+                    if (args[0].Contains("*") || computerName.Contains(args[0].ToUpper()))
                         listNames.Add(computerName);
                 }
                catch (Exception e)
