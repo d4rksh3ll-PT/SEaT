@@ -295,25 +295,20 @@ namespace SEaT
         {
             foreach (var dir in GetSubdirectories(directoryPath)) 
             {
-                currDepth = 1;
                 try
                 {
                     if (IsWritable(directoryPath))
                         Console.WriteLine("\t{0}{1}", new string('\t', indent), "(!)\t" + dir);
-                    if (currDepth != maxDepth)
-                        EnumDirectories(directoryPath + "\\" + dir, currDepth++);
+                    if (recursive)
+                        EnumDirectories(directoryPath + "\\" + dir, indent+1);
                 }
                 catch
-                { }
-              //  for (int i = 1; i <= depth; i++ )
-              //  {
-              //      Console.WriteLine("\t\t" + IsWritable(directoryPath) + "\t" + dir);
-              //  }
+                { 
+                }
             }
         }
-        
-        static int maxDepth = 1;
-        static int currDepth = 0;
+
+        static bool recursive = false;
 
         static void Main(string[] args)
         {
@@ -324,28 +319,52 @@ namespace SEaT
                 Environment.Exit(0);
             }
             List<string> listNames = new List<string>();
-            Console.WriteLine("Building list...");
-            foreach (var computerName in VisibleComputers())
+            if (!args[0].StartsWith("\\"))
+            {
+                Console.WriteLine("Building list...");
+                foreach (var computerName in VisibleComputers())
+                {
+                    try
+                    {
+                        if (args[0].Contains("*") || computerName.Contains(args[0].ToUpper()))
+                            listNames.Add(computerName);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(computerName + ":" + e.Message);
+                    }
+                }
+                if (listNames.Count == 0)
+                {
+                    Console.WriteLine("No computers found!");
+                    Environment.Exit(-1);
+                }
+                for (int i = 0; i < listNames.Count; i++)
+                {
+                    EnumComputer(listNames[i].ToString());
+                }
+            }
+            else
             {
                 try
                 {
-                    if (args[0].Contains("*") || computerName.Contains(args[0].ToUpper()))
-                        listNames.Add(computerName);
+                    Uri uri = new Uri(args[0]);
+                    if (uri.Segments.Count() > 1)
+                    {
+                        if (args.Length == 2)
+                        {
+                            if (args[1].ToUpper() == "/R")
+                                recursive = true;
+                        }
+                        EnumDirectories(uri.OriginalString, 1);
+                    }
+                    else
+                        EnumComputer(uri.Host);    
                 }
-               catch (Exception e)
-               {
-                    Console.WriteLine(computerName + ":" + e.Message);
-               }
-            }
-            if (listNames.Count == 0)
-            {
-                Console.WriteLine("No computers found!");
-                Environment.Exit(-1);
-            }
-            for (int i = 0; i < listNames.Count; i++)
-            {
-                EnumComputer(listNames[i].ToString());
-
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
             }
         }
     }
