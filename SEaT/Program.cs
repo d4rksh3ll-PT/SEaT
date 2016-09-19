@@ -307,6 +307,8 @@ namespace SEaT
                 {
                     if (IsWritable(directoryPath))
                         Console.WriteLine("\t{0}{1}", new string('\t', indent), "(!)\t" + dir);
+                    else
+                        Console.WriteLine("\t{0}{1}", new string('\t', indent), "(OK)\t" + dir);
                     if (recursive)
                         EnumDirectories(directoryPath + "\\" + dir, indent+1);
                 }
