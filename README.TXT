@@ -1,4 +1,4 @@
-#SEaT (Share Enumeration and Test)
+#SEaT (Share Enumeration and ACL Testing)
 
 This a command-line tool to test misconfigurated ACL's. It will try to find write privilenges using the current user credentials.
 Can also be used with "runas" or "psexec" to impersonate another user.
