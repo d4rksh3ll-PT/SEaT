@@ -13,3 +13,5 @@ Enumerates all matching computers with the given string.
 
 SEaT.exe \\server\share[\folder] [/R]
 List and tests the share, can use the /R switch to perform recursive tests.
+
+Download: https://github.com/d4rksh3ll-PT/SEaT/releases/latest
