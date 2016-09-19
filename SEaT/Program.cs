@@ -276,7 +276,9 @@ namespace SEaT
 
         static void ShowUsage()
         {
-            
+            Console.WriteLine("SEaT.exe *\nEnumerates all computers and shares even hidden or administrative.\n");
+            Console.WriteLine("SEaT.exe serverXYZ\nEnumerates all matching computers with the given string.\n");
+            Console.WriteLine("SEaT.exe \\\\server\\share[\\folder]\nList and tests the share can use /R for recursive tests.\n");
         }
 
         static void EnumComputer(string computerName)
