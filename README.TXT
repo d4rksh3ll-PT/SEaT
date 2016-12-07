@@ -8,7 +8,7 @@ Usage:
 SEaT.exe *
 Enumerates all computers and shares even hidden or administrative.
 
-SEaT.exe serverXYZ
+SEaT.exe server[XYZ]
 Enumerates all matching computers with the given string.
 
 SEaT.exe \\server\share[\folder] [/R]
